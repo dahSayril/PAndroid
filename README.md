@@ -1,11 +1,8 @@
-# Programmazione Android
+# Primi passi con Android
 Qui potrai trovare tutti i programmi creati per poter conseguire l'esame di Programmazione Mobile.
 Oltre ai programmi vi sono anche dei riassunti per spiegare in modo molto breve gli argomenti essenziali di Android.
 I riassunti sono un estratto della guida di Android di html.it: 
 https://www.html.it/guide/guida-android/  
-  
-  
-# Primi passi con Android
 * [Activity](#activity)
 * [Ciclo di vita di un'Activity](#il-ciclo-di-vita-di-unactivity)
 * [Gestire le risorse e gli asset](#gestire-le-risorse-e-gli-asset)
