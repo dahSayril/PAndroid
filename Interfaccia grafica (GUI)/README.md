@@ -6,6 +6,7 @@
 * [Creare un menu](#creare-un-menu)
 * [ActionBar](#actionbar)
 * [Le notifiche in Android](#le-notifiche-in-android)
+* [ListView e GridView](#listview-e-gridview)
 ## Il layout di un'app Android
 La struttura grafica di un'activity prende il nome di **Layout**. Esistono tre modi per **creare interfacce utenti in Android**:
 * procedurale, ovvero l'implementazione dell'interfaccia grafica nel codice.
@@ -322,3 +323,45 @@ NotificationManger notificationManager = (NotificationManager)
 notificationManager.notify(0, n.build());
 ```
 Ora, dopo l'apertura del "Notification drawer", si potrà cliccare sulla notifica e ciò comporterà l'esecuzione dell'azione contenuta nel `PendingIntent` con conseguente avvio della `MessageActivity`. La notifica scomparirà dalla barra dell'applicazione non appena seleziona, merito dell'invocazione al metodo `setAutoCancel()`.
+## ListView e GridView
+Finora abbiamo apprezzato due modalità diverse per realizzare le varie parti delle nostre app:
+* **design in XML**, per layout e risorse, dall'approccio piuttosto visuale ma orientato alal definizione di parti statiche.
+* **sviluppo in Java**, fondamnetale per le funzionalità dinamiche ma meno pratico per il disegno di porzioni di layout.  
+  
+Ma se dovessimo realizzare una "via di mezzo": una visualizzazione iterativa di contenuti archiviati in strutture dati, potenzialmente variabili, come dovremmo comportarci? Questo lavoro viene affrontato con Adapter e AdapterView dove:
+* **Adapter** è un componente collegato ad una struttura dati di oggetti Java (array, Collections, risultati di query) e che incapsula il meccanismo di trasformazione di questi oggetti in altrettante View da mostrare su layout.
+* **AdapterView** è un componente visuale che è collegato ad un adapter e raccoglie tutte le View prodotte dall'adapter per mostrarle secondo le sue politiche.  
+### ListView, un AdapterView molto comune
+Abbiamo un array di oggetti `String` e vorremmo che, iterativamente, una View ci mostrasse tutte le stringhe disposte in righe. Agiamo cosi:
+* otteniamo un riferimento alla struttura data, in questo caso l'array di String.
+* istanziamo un ArrayAdapter assegnandogli, via costruttore, l'array che fungerà da sorgente dei dati e il layout da usare per ogni singola riga.
+* recuperiamo la ListView predisposta nel layout e le assegnamo il riferimento all'adapter che sarà il suo "fornitore" di View.  
+  
+Creiamo due layout:
+* uno per l'activity, nel file activity_main.xml, costituito solo dalla ListView:  
+```
+<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/listview"
+android:layout_width="match_parent"
+android:layout_height="match_parent"/>
+```
+* l'altro per la singola riga, in row.xml, contenente sola la TextView che mostrerà **il testo di ogni riga**:
+```
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"/>
+```
+Il collegamento dinamico tra struttura dati/Adapter/ListView viene realizzato nell'`onCreate` dell'activity:
+```
+@Override
+protected void onCreate(Bundle savedInstancesState) {
+  super.onCreate(savedInstancesState);
+  String[] città = new String[]
+    {"Torino", "Roma", "Milano", "Napoli", "Firenze"};
+  ArrayAdapter <String> adapter = new ArrayAdapter <String> (this, R.layout.row, città);
+  ListView listView = (ListView) findViewById(R.id.listView);
+  listView.setAdapter(adapter);
+}
+```
+![ListView](https://user-images.githubusercontent.com/48457431/102020128-72b81000-3d77-11eb-9aaa-c3d65783c4d2.png)
+### GridView
