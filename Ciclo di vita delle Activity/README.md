@@ -12,7 +12,7 @@ Quando si ritorna all'attività
 Quando l'utente ruota il dispositivo, l'attività viene prima eliminata:
 * **onPause()**
 * **onStop()**
-* **onDestroy**  
+* **onDestroy()**  
   
 e poi ricreata:
 * **onCreate()**
