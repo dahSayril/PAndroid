@@ -7,6 +7,8 @@
 * [ActionBar](#actionbar)
 * [Le notifiche in Android](#le-notifiche-in-android)
 * [ListView e GridView](#listview-e-gridview)
+* [Creare Custom Adapter](#creare-custom-adapter)
+* [Fragment in Android](#fragment-in-android)
 ## Il layout di un'app Android
 La struttura grafica di un'activity prende il nome di **Layout**. Esistono tre modi per **creare interfacce utenti in Android**:
 * procedurale, ovvero l'implementazione dell'interfaccia grafica nel codice.
@@ -365,3 +367,151 @@ protected void onCreate(Bundle savedInstancesState) {
 ```
 ![ListView](https://user-images.githubusercontent.com/48457431/102020128-72b81000-3d77-11eb-9aaa-c3d65783c4d2.png)
 ### GridView
+Se volessimo sostituire la ListView con un altro AdapterView, diciamo la GridView specializzata in grigle sarà sufficiente:  
+**nel layout, sostituire la ListView con la GridView**, assegnando un numero di colonne alla griglia:
+```
+<GridView xmlns:android="http://schemas.android.com/apk/res/android
+  android:id="@+id/gridview"
+  android:numColumns="3"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent" />
+```
+nel codice Java semplicemente **sostituire l'uso della classe ListView con GridView**:
+```
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+  super.onCreate(savedInstanceState);
+  setContentView(R.layout.activity_main2);
+  String[] nomi = new String[]
+    {"Torino", "Roma", "Milano", "Napoli", "Firenze"};
+  ArrayAdapter <String> adapter = new ArrayAdapter <String> (this, R.layout.row.nomi);
+  GridView gridView = (GridView) findViewById(R.id.gridView);
+  gridView.setAdapter(adapter);
+}
+```
+### Gestione degli eventi
+Gli AdapterView hanno un altro ruolo molto importante: la gestion degli eventi. Come per tutte le View viene effettuato mediante il meccanismo dei listener. Un caso molto comune è la gestione del click su un elemento della lista, ciò che viene normalmente interpretato come selezione. Tornando all'esempio della GridView, se volessimo far visualizzare un Toast che notifica quale elemento è stato selezionato dovremmo inserire il seguente codice:
+```
+GridView gridView = (GridView) findViewById(R.id.gridView);
+gridView.setOnItemClickListener(new OnItemClickListener() {
+  @Override
+  public void onItemClick(AdapterView <?> av, View v, int pos, long id) {
+    Toast.makeText(getApplicationContext(), "Selezionato" + citta[pos], Toast.LENGTH_LONG).show();
+  }
+});
+```
+## Creare Custom Adapter
+Vediamo un caso in cui si realizza un Adapter in versione *custom* che rappresenta degli oggetti non primitivi.  
+Prendiamo come esempio la seguente classe Java:
+```
+public class ArticleInfo {
+  private String title;
+  private String category;
+  private Date date;
+  *
+  *
+  *
+```
+Affinchè ognuno di questi oggetti, per così dire, si trasformi in una riga della ListView contenuta nell'activity **prepariamo subito un layout** nel file *res/layout/listaactivity_row_article.xml*:
+```
+<RelativeLayout xmls:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="200dp"
+  android:background="@drawable/row_background"
+  android:descendantFocusability="blocksDescendants"
+  android:padding="10dp">
+  <LinearLayout
+   android:layout_height="wrap_content"
+   android:layout_width="wrap_content"
+   android:layout_alignParentLeft="true"
+   android:layout_centerVertical="true"
+   android:orientation="vertical"
+   android:id="@+id/ll_text"
+   android:layout_toLeftOf="@+id/btn_bookmark">
+   <TextView
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     style="@style/big_textstyle"
+     android:id="@+id/txt_article_description"/>
+   <TextView
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     style="@style/small_textstyle"
+     android:id="@+id/txt_article_url"/>
+  </LinearLayout>
+  <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:maxLength="5"
+    style="@style/small_textstyle"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentTop="true"
+    android:id="@+id/txt_article_datetime"/>
+</RelativeLayout>
+```
+Questo layout rappresenta la form di una singola riga che apparirà nell'AdapterView.  
+L'elemento che si occuperà della trasformazione di ogni oggetto ArticlesInfo in una View sarà proprio l'Adapter: ma non uno standard, uno personallizato creato da noi.  
+Per fare questo dobbiamo:
+1. creare una classe che dichiaremo `ArticlesAdapter`, estensione di `BaseAdapter`.  
+2. fare in modo che la classe possieda un riferimento alla struttra dati da visualizzare, magari passato tramite costruttore. Nel nostro caso sarà una List `<ArticlesInfo>`.  
+3. **implementare obbligatoriamente i metodi astratti** di BaseAdapter:
+* `getCount()`: restituisce la quantità di elementi presenti nella struttura dati.
+* `getItem(int position)`: restituisce un Object che rappresenta l'elemento della struttura dati nella posizione position.
+* `getItemId(int position)`: restituisce un id univoco per l'elemento in posizione position.
+* `getView(int position, View v, ViewGroup vg)`: restituisce la View che costituirà una riga della ListView. La view sarà strutturata secondo il layout *listactivity_row_article* e popolata con i dati dell'elemento in posizione *position*.  
+  
+Vediamo il codice dell'Adapter:
+```
+public List <ArticleInfo> articles = null;
+private Context context = null;
+private SimpleDateFormat simple = new SimpleDateFormat("dd/MM", Locale.ITALIAN);
+public ArticlesAdapter(Context context, List <ArticleInfo> articles) {
+  this.articles = articles;
+  this.context = context;
+}
+@Override
+public int getCount() { return articles.size(); }
+@Override
+public Object getItem(int position) { return articles.get(position); }
+@Override
+public long getItemId(int position) { return getItem(position).hashCode(); }
+@Override
+public View getView(int postion, View v, ViewGroup vg) {
+  if(v == null)
+    v = LayoutInflater.from(context).inflate(R.layout.listactivity_row_article, null);
+  ArticleInfo ai = (ArticleInfo) getItem(position);
+  TextView txt (TextView) v.findViewById(R.id.text_article_description);
+  txt.setText(ai.getTitle());
+  ...
+  return v;
+}
+```
+Al suo interno, per prima cosa, viene controllato se la View passata in input è nulla e solo in questo caso viene inizializzata con il `LayoutInflater`. Questo aspetto è molto importante ai fini della salvaguardia delle risorse infatti Android riciclerà quanto possibile le View già create. Il LayoutInflater attua per i layout quello che abbiamo già visto fare per i menu con il `MenuInflater`. In pratica la View da creare verrà strutturata in base al "progetto" definito nel layout XML indicatogli.  
+Dopo il blocco `if`, la View non sarà sicuramente nulla perciç procederemo al completamento dei suoi campi. I dati verrano prelevati dall'oggetto ArticleInfo di posizione position recuperato mediante `getItem`, già implementato. Al termine, `getView` restituirà la View realizzata.  
+Questo Adapter incarnerà tutta la logica di trasformazione infatti per il resto l'activity è molto semplice. Tra l'altro estende la classe ListActivity che ha un layout costituito da una ListView e alcuni metodi per la sua gestione.
+```
+public class MainActivity extends ListActivity {
+  private ArticlesAdapter adapter = new ArticlesAdapter(this, generateNews());
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+   super.onCreate(savedInstanceState);
+    getListView().setPadding(10, 10, 10, 10);
+    setListAdapter(adapter);
+  }
+  private List<ArticleInfo> generateNews() {
+    ArrayList<ArticleInfo> list = new ArrayList<ArticleInfo>();
+    Calendar c = Calendar.getInstance();
+    ArticleInfo tmp = new ArticleInfo();
+    tmp.setTitle("WordPress: integrare un pannello opzioni nel tema");
+    tmp.setCategory("CMS");
+    c.set(2014,3,23);
+    tmp.setDate(new Date(c.getTimeInMillis()));
+    list.add(tmp);
+    /*
+    * OMISSIS: il codice crea altri oggetti "fittizi" da visualizzare
+    * */
+    return list;
+  }
+}
+```
+## Fragment in Android
