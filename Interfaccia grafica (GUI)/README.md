@@ -515,3 +515,129 @@ public class MainActivity extends ListActivity {
 }
 ```
 ## Fragment in Android
+Un Fragment è una porzione di activity. Ma si faccia attenzione a comprenderne bene il ruolo. Non si tratta solo di un gruppo di controlli o di una sezione del layout. Può essere definito più come una specie di sub-activity con un suo ruolo funzionale molto importante ed un suo ciclo di vita.  
+Un fragment non può vivere senza un'activity. Tipicamente nei nostri programmi creeremo più fragments che si alterneranno nel layout mentre di activity ne sarà sufficiente una. Come detto il fragment ha il suo ciclo di vita fortemente collegato con quello dell'activity di appartenenza, se ad esempio l'activity è in pausa (stato "paused" del ciclo di vita), lo sono anche tutti i suoi frammenti.  
+Questo è la sequenza di stati che scandiscono la vita del fragment:
+![Ciclo di vita Fragment](https://user-images.githubusercontent.com/48457431/102267863-c9118400-3f1a-11eb-8937-9126988c0d41.jpg)
+Come si vede ricordano molto quelli dell'activity. La fase più variegata è l'inizializzazione del fragment:
+* **onAttach**: segnala il momento in cui il fragment scopre l'activity di appartenenza. Attenzione che a quel punto l'activity non è stata ancora creata quindi si può solo conservare un riferimento ad essa ma non interagirvi.
+* **onCreate**: è la creazione del fragment in quanto componente.
+* **onCreateView**: il programmatore vi lavorerà spesso. E' il momento in cui viene creato il layout del fragment. Solitamente qui si fa uso del LayoutInflater.
+* **onActivityCreated**: segnala che la creazione dell'activity è stata completata, vi si può interagire in tutto e per tutto.  
+  
+Gli altri metodi di callback del ciclo di vita vengono chiamati in corrispondenza degli omonimi metodi dell'activity.  
+Normalmente dovremo implementare almeno:
+* onCreate(), dove si effettua la inizializzazione come in un activity, ma NON definiamo il layout.
+* onCreateView(), dove definiamo il layout, e quindi facciamo l'inflate di un file di layout (il metodo deve restituire una View).
+* onPause(), il primo metodo chiamato quando il frammento viene eliminato (si dovrebbero rendere permanenti evenutali cambiamenti altrimenti si perdono).
+### Hello Fragment!
+Per creare il fragment seguiremo questi *step*:
+* creeremo il layout per l'activity in cui ricaveremo il posto per alloggiare il nostro fragment.
+* definiremo il layout del fragment che conterrà il vero aspetto dell'activity, e, di conseguenza, anche la stringa "Hello World!".
+* definiremo la classe fragment che essenzialmente servirà a caricare il layout di cui al punto precedente.
+* creeremo la nostra activity che svolgerà per lo più il ruolo di bacino di fragment.  
+  
+Il primo frammento di codice mostra il layout del fragment (file: res/layout/fragment_main.xml).  
+Come si vede, se fosse stato destinato ad un'activity sarebbe stato identico. Quindi la novità architetturale dei fragment non influenza il layout:
+```
+<RelativeLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:padding="@dimen/activity_vertical_margin">
+<TextView
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="@string/hello_world" />
+</RelativeLayout>
+```
+Il layout dell'activity è il seguente (file: res/layout/activity_main.xml):
+```
+<FrameLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/container"
+android:layout_width="match_parent"
+android:layout_height="match_parent"/>
+```
+Tutto lo spazio disponibile verrà riempito da un layout che non abbiamo mai usato sinora: il **FrameLayout**.  
+Viene utilizzato quando vi si deve ospitare un unico elemento, in questo caso il fragment. Fondamentale definire l'id in quanto questo layout svolgerà il ruolo di contenitore del fragment e pertanto verrà invocato dal codice java.  
+La classe fragment mostra evidenti alcune caratteristiche:
+* estende la classe Fragment del framework.
+* presenta metodi propri del ciclo di vita dei fragment. COme già accenato, sarà frequente l'override del metodo `onCreateView` in quanto è il momento in cui viene allestita l'interfaccia utente mostrata dal fragment. Non ci soprendono (ormai) le operazioni svolte al suo interno: assegnazioni di un layout mediante LayoutInflater.
+```
+public class HelloFragment extends Fragment {
+  public HelloFragment() { }
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    Bundle savedInstanceState) {
+    View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+    return rootView;
+  }
+}
+```
+Il codice dell'activity contiene solo il metodo `onCreate`. Al suo interno, vengono svolte nelle prime due righe le operazioni consuete ma questa volta il caricamento del layout con `setContentView` non basta. Infatti questo porterà a display solo il FrameLayout ancora vuoto.  
+Per aggiungere il fragment, si procederà per via dinamica richiedendo al FragmentManager l0avvio di una transazione `add` che aggiungerà il nuovo Fragment di classe HelloFragment al layout identificato da `R.id.container`.
+```
+public class MainActivity extends ActionBarActivity {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+    if (savedInstanceState == null) {
+      getSupportFragmentManager().beginTransaction()
+      .add(R.id.container, new HelloFragment()).commit();
+    }
+  }
+}
+```
+L'operazione `add` fa parte delle **FragmentTransactions**. Le più comuni sono:
+* `add`: aggiunge un fragment all'activity.
+* `remove`: rimuove un fragment precedentemente aggiunto.
+* `replace`: sostituisce un fragment con un altro.
+* `hide`: nasconde un fragment.
+* `show`: mostra un fragment precedentemente nascosto.  
+  
+Notare ancora che, come avviene per le transazioni nei database, le operazioni iniziano con un `beginTransaction` e vengono definitivamente salvate con un `commit`. Si può esprimere l'uso dei fragment realizzando layout basati su strutture e tab e a schede, molto comuni nelle interfacce utente.
+### Layout adattabili Smartphone / Tablet in Android
+I fragments possono essere visti come blocchi componibili che permettono di rendere il layout adattabile al dispositivo. Se la frammentazione dei dispositivi rappresenta una problematica di rilievo per i programmatori Android, i fragments rappresentano in buona parte una soluzione.
+![25_img01](https://user-images.githubusercontent.com/48457431/102267951-e8101600-3f1a-11eb-95df-0637f610692a.png)
+La figura mostra due dispotivi di tipo diverso ed in configurazioni differenti:
+* uno **smartphone in portrait**. Immaginiamo con uno schermo piccolo, anche 3 pollici.
+* un **tablet**, quindi almeno da 7 pollici, posizionato **in landscape**.  
+  
+I layout presenti su entrambi sono costituiti da due fragments, gli stessi due fragments a e b. Con adeguate configurazioni delle risorse e qualche aggiunta al codice visto prima, possiamo creare anche noi un **layout adattabile** che riesca a mostrarsi in *one-pane* su smartphone e *two-pane* su tablet in landscape.
+### Configurazione delle risorse
+Creiamo **due cartelle di risorse layout**:
+* *layout-large-land* che verrà usato solo per dispositivi con display large in posizione landscape.
+* *layout*, la cartella di default. Verrà chiamata in causa per tutte le altre soluzioni.  
+  
+La configurazione multipla ha successo se in entrambe le cartelle mettiamo il file di layout con il medesimo nome, *activity_main.xml*. Da questo momento, l'activity cercherà sempre la risorsa `R.layout.activity_main` ma questa, **n base alla configurazione del dispositivo**, corrisponderà al file *res/layout-large-lande/activity_main.xml* o al file 
+*res/layout/activity_main.xml*.  
+Vediamo entrambi i file di layout. File 1: *res/layout/activity_main.xml* :
+```
+<FrameLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/container"
+android:layout_width="match_parent"
+android:layout_height="match_parent"/>
+```
+Questo primo layout è identico a quello visto prima. E' un FrameLayout che ospiterà un fragment singolo assegnato dinamicamente con FragmentsTransactions.  
+File 2: *res/layout-large-land/activity_main.xml*:
+```
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
+<fragment android:name="it.html.guida.gui.fragments.CountryFragment"
+android:id="@+id/countryfrag"
+android:layout_width="0dp"
+android:layout_height="match_parent"
+android:layout_weight="1"/>
+<fragment android:name="it.html.guida.gui.fragments.CityFragment"
+android:id="@+id/cityfrag"
+android:layout_width="0dp"
+android:layout_height="match_parent"
+android:layout_weight="2"/>
+</LinearLayout>
+```
+Nel layout two-pane, i fragments appaiono insieme sin dall'inziio mentre le FragmentsTransactions non dovranno più intervenire. Come segnaposti, abbiamo i tag `<fragment>`. Il loro attributo android:name indica quale tipo di Fragment dovrà posizionarsi in ogni collocazione.
