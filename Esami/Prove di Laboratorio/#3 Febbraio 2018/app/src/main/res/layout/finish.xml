@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Finish">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Congratulazioni. Hai totalizzato:"
+        android:textAlignment="center"
+        android:textSize="60px"
+        android:layout_above="@id/domandeEsatte"
+        android:layout_marginBottom="50px"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Domande esatte:"
+        android:textAlignment="center"
+        android:textSize="60px"
+        android:id="@+id/domandeEsatte"
+        android:layout_above="@id/domandeErrate"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Domande errate:"
+        android:textAlignment="center"
+        android:textSize="60px"
+        android:id="@+id/domandeErrate"
+        android:layout_above="@id/restartGame"
+        android:layout_marginBottom="50px"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Inizia nuova partita"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/restartGame"
+        android:onClick="startNewGame"/>
+
+</RelativeLayout>
