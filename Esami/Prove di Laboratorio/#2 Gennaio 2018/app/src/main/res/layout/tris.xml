@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Tris"
+    android:id="@+id/tris">
+    
+    <Button
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="#ffebcd"
+        android:id="@+id/uno"
+        android:layout_margin="10dp"/>
+
+    <Button
+        android:id="@+id/due"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="#ffebcd"
+        android:layout_margin="10dp"
+        android:layout_toRightOf="@id/uno"/>
+
+    <Button
+        android:id="@+id/tre"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="#ffebcd"
+        android:layout_toRightOf="@id/due"
+        android:layout_margin="10dp"/>
+
+    <Button
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="#ffebcd"
+        android:id="@+id/quattro"
+        android:layout_margin="10dp"
+        android:layout_below="@id/uno"/>
+
+    <Button
+        android:id="@+id/cinque"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="#ffebcd"
+        android:layout_margin="10dp"
+        android:layout_toRightOf="@id/quattro"
+        android:layout_below="@id/due"/>
+
+    <Button
+        android:id="@+id/sei"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="#ffebcd"
+        android:layout_toRightOf="@id/cinque"
+        android:layout_margin="10dp"
+        android:layout_below="@id/tre"/>
+
+    <Button
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="#ffebcd"
+        android:id="@+id/sette"
+        android:layout_margin="10dp"
+        android:layout_below="@id/quattro"/>
+
+    <Button
+        android:id="@+id/otto"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="#ffebcd"
+        android:layout_margin="10dp"
+        android:layout_toRightOf="@id/sette"
+        android:layout_below="@id/cinque"/>
+
+    <Button
+        android:id="@+id/nove"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="#ffebcd"
+        android:layout_toRightOf="@id/otto"
+        android:layout_margin="10dp"
+        android:layout_below="@id/sei"/>
+
+</RelativeLayout>
