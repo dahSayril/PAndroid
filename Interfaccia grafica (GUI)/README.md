@@ -517,8 +517,8 @@ public class MainActivity extends ListActivity {
 ## Fragment in Android
 Un Fragment è una porzione di activity. Ma si faccia attenzione a comprenderne bene il ruolo. Non si tratta solo di un gruppo di controlli o di una sezione del layout. Può essere definito più come una specie di sub-activity con un suo ruolo funzionale molto importante ed un suo ciclo di vita.  
 Un fragment non può vivere senza un'activity. Tipicamente nei nostri programmi creeremo più fragments che si alterneranno nel layout mentre di activity ne sarà sufficiente una. Come detto il fragment ha il suo ciclo di vita fortemente collegato con quello dell'activity di appartenenza, se ad esempio l'activity è in pausa (stato "paused" del ciclo di vita), lo sono anche tutti i suoi frammenti.  
-Questo è la sequenza di stati che scandiscono la vita del fragment:
-![Ciclo di vita Fragment](https://user-images.githubusercontent.com/48457431/102267863-c9118400-3f1a-11eb-8937-9126988c0d41.jpg)
+Questo è la sequenza di stati che scandiscono la vita del fragment:  
+![Ciclo di vita Fragment](https://user-images.githubusercontent.com/48457431/102267863-c9118400-3f1a-11eb-8937-9126988c0d41.jpg)  
 Come si vede ricordano molto quelli dell'activity. La fase più variegata è l'inizializzazione del fragment:
 * **onAttach**: segnala il momento in cui il fragment scopre l'activity di appartenenza. Attenzione che a quel punto l'activity non è stata ancora creata quindi si può solo conservare un riferimento ad essa ma non interagirvi.
 * **onCreate**: è la creazione del fragment in quanto componente.
