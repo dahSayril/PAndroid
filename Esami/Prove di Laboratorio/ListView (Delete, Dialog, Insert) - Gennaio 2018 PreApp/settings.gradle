@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name = "AmendolaCarmine 16 Gennaio 2018 Preappello"
