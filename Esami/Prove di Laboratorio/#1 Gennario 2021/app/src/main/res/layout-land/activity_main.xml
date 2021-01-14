@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Inserisci la parola"
+        android:textSize="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/inserisciParola"/>
+
+    <EditText
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background"
+        android:id="@+id/parola"
+        android:textSize="20dp"
+        android:layout_marginLeft="5dp"
+        android:layout_below="@id/inserisciParola"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Risultato"
+        android:textSize="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@id/parola"
+        android:id="@+id/inserisciRisultato"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background"
+        android:id="@+id/risultato"
+        android:textSize="20dp"
+        android:layout_marginLeft="5dp"
+        android:layout_below="@id/inserisciRisultato"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Memoria"
+        android:textSize="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@id/risultato"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/inserisciMemoria"/>
+
+    <TextView
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:background="@drawable/background"
+        android:id="@+id/memoria"
+        android:layout_below="@id/inserisciMemoria"
+        android:layout_marginLeft="5dp"/>
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:rowCount="3"
+        android:columnCount="3"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp">
+
+        <Button
+            android:layout_width="125dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:text="Conta"
+            android:onClick="start"
+            android:id="@+id/conta"/>
+        <Button
+            android:layout_width="125dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:text="Inverti"
+            android:onClick="start"
+            android:id="@+id/inverti"/>
+        <Button
+            android:layout_width="125dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:text="Tronca dx"
+            android:onClick="start"
+            android:id="@+id/troncaDX"/>
+        <Button
+            android:layout_width="125dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:text="Tronca sx"
+            android:onClick="start"
+            android:id="@+id/troncaSX"/>
+        <Button
+            android:layout_width="125dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:text="Raddoppia"
+            android:onClick="start"
+            android:id="@+id/raddoppia"/>
+        <Button
+            android:layout_width="125dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:text="Memorizza"
+            android:onClick="start"
+            android:id="@+id/memorizza"/>
+        <Button
+            android:layout_width="125dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:text="+ Contatena"
+            android:onClick="start"
+            android:id="@+id/concatena"/>
+        <Button
+            android:layout_width="125dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:text="Clear parola"
+            android:onClick="start"
+            android:id="@+id/clearParola"/>
+        <Button
+            android:layout_width="125dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:text="Clear memoria"
+            android:onClick="start"
+            android:id="@+id/clearMemoria"/>
+
+    </GridLayout>
+
+</RelativeLayout>
